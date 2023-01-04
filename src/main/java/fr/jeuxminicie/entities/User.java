@@ -16,8 +16,6 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
-	private String firstName;
-	
 	@Column(unique = true)
 	private String email;
 	
@@ -38,7 +36,6 @@ public class User {
 	public User(long id, String firstName, String email, String login, String password, int version) {
 		super();
 		this.id = id;
-		this.firstName = firstName;
 		this.email = email;
 		this.login = login;
 		this.password = password;
@@ -53,16 +50,6 @@ public class User {
 	public void setId(long id) {
 		this.id = id;
 	}
-	
-	public String getFirstName() {
-		return firstName;
-	}
-
-
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
 
 	public String getEmail() {
 		return email;
@@ -100,7 +87,7 @@ public class User {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(email, firstName, id, login, password, version);
+		return Objects.hash(email, id, login, password, version);
 	}
 
 
@@ -113,12 +100,9 @@ public class User {
 		if (getClass() != obj.getClass())
 			return false;
 		User other = (User) obj;
-		return Objects.equals(email, other.email) && Objects.equals(firstName, other.firstName) && id == other.id
-				&& Objects.equals(login, other.login) && Objects.equals(password, other.password)
-				&& version == other.version;
+		return Objects.equals(email, other.email) && id == other.id && Objects.equals(login, other.login)
+				&& Objects.equals(password, other.password) && version == other.version;
 	}
 
-	
-	
 
 }
