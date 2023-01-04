@@ -5,6 +5,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import fr.jeuxminicie.entities.Game;
+import fr.jeuxminicie.entities.Score;
 import fr.jeuxminicie.entities.User;
 
 @Repository
@@ -16,6 +17,7 @@ public interface MappingRepository {
 	@Query("FROM user WHERE user.id = :userId")
 	User findUserById(@Param("userId") long userId);
 	
-	
+	@Query("FROM score WHERE score.id = :scoreId")
+	Score findScoreById(@Param("scoreId") long scoreId);
 	
 }
