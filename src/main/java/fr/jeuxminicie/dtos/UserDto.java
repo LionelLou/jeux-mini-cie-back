@@ -1,4 +1,4 @@
-package fr.jeuxminicie.dto;
+package fr.jeuxminicie.dtos;
 
 import java.io.Serializable;
 import java.util.Objects;

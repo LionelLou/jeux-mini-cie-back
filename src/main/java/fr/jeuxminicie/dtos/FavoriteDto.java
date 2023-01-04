@@ -1,36 +1,29 @@
-package fr.jeuxminicie.dto;
+package fr.jeuxminicie.dtos;
 
 import java.io.Serializable;
 import java.util.Objects;
 
 @SuppressWarnings("serial")
-public class ScoreDto implements Serializable {
+public class FavoriteDto implements Serializable{
 
-	
 	private long id;
 	
 	private long userId;
 	
 	private long gameId;
 	
-	private int score;
-	
-	private int time;
-	
 	private int version;
-	
 
-	public ScoreDto() {
+
+	public FavoriteDto() {
 		super();
 	}
 
-	public ScoreDto(long id, long userId, long gameId, int score, int time, int version) {
+	public FavoriteDto(long id, long userId, long gameId, int version) {
 		super();
 		this.id = id;
 		this.userId = userId;
 		this.gameId = gameId;
-		this.score = score;
-		this.time = time;
 		this.version = version;
 	}
 
@@ -58,22 +51,6 @@ public class ScoreDto implements Serializable {
 		this.gameId = gameId;
 	}
 
-	public int getScore() {
-		return score;
-	}
-
-	public void setScore(int score) {
-		this.score = score;
-	}
-
-	public int getTime() {
-		return time;
-	}
-
-	public void setTime(int time) {
-		this.time = time;
-	}
-
 	public int getVersion() {
 		return version;
 	}
@@ -84,7 +61,7 @@ public class ScoreDto implements Serializable {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(gameId, id, score, time, userId, version);
+		return Objects.hash(gameId, id, userId, version);
 	}
 
 	@Override
@@ -95,15 +72,13 @@ public class ScoreDto implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ScoreDto other = (ScoreDto) obj;
-		return gameId == other.gameId && id == other.id && score == other.score && time == other.time
-				&& userId == other.userId && version == other.version;
+		FavoriteDto other = (FavoriteDto) obj;
+		return gameId == other.gameId && id == other.id && userId == other.userId && version == other.version;
 	}
 
 	@Override
 	public String toString() {
-		return "ScoreDto [id=" + id + ", userId=" + userId + ", gameId=" + gameId + ", score=" + score + ", time="
-				+ time + ", version=" + version + "]";
+		return "FavoriteDto [id=" + id + ", userId=" + userId + ", gameId=" + gameId + ", version=" + version + "]";
 	}
 	
 }
