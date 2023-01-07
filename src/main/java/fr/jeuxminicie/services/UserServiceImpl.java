@@ -22,18 +22,12 @@ public class UserServiceImpl implements UserService, GenericService<UserDto>{
 	private UserMapper mapper;
 	
 	@Override
-	public UserDto getById(long id) {
-		
-		try {
-			return mapper.userToUserDto(repository.getReferenceById(id));
-		}catch(NotFoundException e) {
-			
-		}
-		
+	public UserDto getById(long id) throws Exception {
+		return mapper.userToUserDto(repository.getReferenceById(id));
 	}
 
 	@Override
-	public List<UserDto> getAll() {
+	public List<UserDto> getAll() throws Exception {
 
 		return repository.findAll().stream()
 								   .map(mapper::userToUserDto)
@@ -41,17 +35,15 @@ public class UserServiceImpl implements UserService, GenericService<UserDto>{
 	}
 
 	@Override
-	public void deleteById(long id) {
+	public void deleteById(long id) throws Exception {
 		repository.deleteById(id);
 	}
-
+	
 	@Override
-	public UserDto saveOrUpdate(UserDto object) {
-		// TODO Auto-generated method stub
+	public UserDto saveOrUpdate(UserDto userDto) throws Exception {
+	
+		
 		return null;
 	}
-
-	
-	
 
 }

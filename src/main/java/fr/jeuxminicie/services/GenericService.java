@@ -4,12 +4,12 @@ import java.util.List;
 
 public interface GenericService<T> {
 
-	T getById(long id);
+	T getById(long id) throws Exception;
 	
-	List<T> getAll();
+	List<T> getAll() throws Exception;
 	
-	void deleteById(long id);
+	void deleteById(long id) throws Exception;
 	
-	T saveOrUpdate(T object);
+	T saveOrUpdate(T object) throws Exception;
 	
 }

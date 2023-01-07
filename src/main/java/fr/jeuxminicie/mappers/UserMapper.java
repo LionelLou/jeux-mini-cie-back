@@ -18,7 +18,8 @@ public interface UserMapper {
 	
 	
 	@Mapping(target= "id", ignore = true)
+	@Mapping(target= "password", ignore = true)
 	@Mapping(target= "version", ignore = true)
-	UserDto newUserDtoToUser(NewUserDto newUserDto);
+	User newUserDtoToUser(NewUserDto newUserDto);
 
 }
