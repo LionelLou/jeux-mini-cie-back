@@ -10,6 +10,4 @@ public interface GenericService<T> {
 	
 	void deleteById(long id) throws Exception;
 	
-	T saveOrUpdate(T object) throws Exception;
-	
 }
