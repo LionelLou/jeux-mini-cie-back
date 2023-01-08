@@ -40,21 +40,73 @@ public class UserServiceImpl implements UserService, GenericService<UserDto> {
 	public void deleteById(long id) throws Exception {
 		repository.deleteById(id);
 	}
-
+	
+	
+	
 	@Override
-	public UserDto updateUserEmail(UserUpdateDto userUpdateDto) {
-
+	public User checkIfUserEmailExistsAndReturnUser(UserUpdateDto userUpdateDto) throws Exception {
 		
-		userUpdateDto.getEmail();
+		User user = repository.findByEmail(userUpdateDto.getEmail()).orElse(null);
 		
 		
-		return null;
+		if(user == null) {
+			throw new Exception("User with given email not found !");
+		}
+		
+		return user;
+	}
+	
+	
+	@Override
+	public void checkUserCredentials(User user, UserUpdateDto userUpdateDto) throws Exception {
+		
+		if( user.getPassword() != HashTools.hashSHA512(userUpdateDto.getPassword())){
+			throw new Exception("Wrong password !");
+		}
+		
 	}
 
 	@Override
-	public UserDto updateUserPassword(UserUpdateDto userUpdateDto) {
-		// TODO Auto-generated method stub
-		return null;
+	public UserDto updateUserEmail(UserUpdateDto userUpdateDto) throws Exception {
+
+		User user = checkIfUserEmailExistsAndReturnUser(userUpdateDto);
+		
+		checkUserCredentials(user, userUpdateDto);
+		
+		if( !EmailTools.checkIfEmailIsValid(userUpdateDto.getNewEmail())) {
+			throw new Exception("Email format is not valid !");
+		}
+		
+		user.setEmail(userUpdateDto.getNewEmail());
+
+		User userPersisted = repository.saveAndFlush(user);
+		
+		UserDto userPersistedDto = mapper.userToUserDto(userPersisted);
+		
+		return userPersistedDto;
+		
+	}
+
+	@Override
+	public UserDto updateUserPassword(UserUpdateDto userUpdateDto) throws Exception {
+
+		
+		User user = checkIfUserEmailExistsAndReturnUser(userUpdateDto);
+		
+		checkUserCredentials(user, userUpdateDto);
+		
+		if (userUpdateDto.getNewPassword().length() < 8) {
+			throw new Exception("Password is too short !");
+		}
+		
+		
+		user.setPassword(HashTools.hashSHA512(userUpdateDto.getNewPassword()));
+		
+		User userPersisted = repository.saveAndFlush(user);
+		
+		UserDto userPersistedDto = mapper.userToUserDto(userPersisted);
+		
+		return userPersistedDto;
 	}
 
 	@Override
@@ -98,5 +150,26 @@ public class UserServiceImpl implements UserService, GenericService<UserDto> {
 
 		return userPersistedDto;
 	}
+
+	@Override
+	public UserDto resetUserPassword(UserUpdateDto userUpdateDto) throws Exception {
+
+		
+		User user = checkIfUserEmailExistsAndReturnUser(userUpdateDto);
+		
+		
+		user.setPassword(HashTools.hashSHA512(userUpdateDto.getNewPassword()));
+		
+		User userPersisted = repository.saveAndFlush(user);
+		
+		UserDto userPersistedDto = mapper.userToUserDto(userPersisted);
+		
+		return userPersistedDto;
+		
+	}
+
+
+
+
 
 }

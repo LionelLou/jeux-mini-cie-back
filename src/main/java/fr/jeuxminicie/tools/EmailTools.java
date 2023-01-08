@@ -8,15 +8,19 @@ public class EmailTools {
 	
 	public static boolean checkIfEmailIsValid(String email) {
 		
-		Pattern emailPattern = Pattern.compile("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$");
+		boolean result = false;
+		
+		String pattern = "/@/";
+		
+		Pattern emailPattern = Pattern.compile(pattern);
 					
 		Matcher emailMatcher = emailPattern.matcher(email);
 					
-		if(!emailMatcher.matches()) {
-			return true;
-		}else {
-			return false;
+		if(emailMatcher.matches()) {
+			result = true;
 		}
+		
+		return result;
 	}
 
 }
