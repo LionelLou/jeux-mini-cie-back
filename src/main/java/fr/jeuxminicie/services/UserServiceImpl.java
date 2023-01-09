@@ -9,6 +9,9 @@ import org.springframework.stereotype.Service;
 import fr.jeuxminicie.dtos.UserDto;
 import fr.jeuxminicie.dtos.UserUpdateDto;
 import fr.jeuxminicie.entities.User;
+import fr.jeuxminicie.exceptions.CredentialsException;
+import fr.jeuxminicie.exceptions.EmailException;
+import fr.jeuxminicie.exceptions.NotFoundException;
 import fr.jeuxminicie.mappers.UserMapper;
 import fr.jeuxminicie.repositories.UserRepository;
 import fr.jeuxminicie.tools.EmailTools;
@@ -17,7 +20,7 @@ import jakarta.transaction.Transactional;
 
 @Service
 @Transactional
-public class UserServiceImpl implements UserService, GenericService<UserDto> {
+public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserRepository repository;
@@ -27,7 +30,13 @@ public class UserServiceImpl implements UserService, GenericService<UserDto> {
 
 	@Override
 	public UserDto getById(long id) throws Exception {
-		return mapper.userToUserDto(repository.getReferenceById(id));
+		
+		try {
+			return mapper.userToUserDto(repository.getReferenceById(id));
+		}catch (Exception e) {
+			throw new NotFoundException("The ressource with given id could not be found", e);
+		}
+			
 	}
 
 	@Override
@@ -38,7 +47,13 @@ public class UserServiceImpl implements UserService, GenericService<UserDto> {
 
 	@Override
 	public void deleteById(long id) throws Exception {
-		repository.deleteById(id);
+		
+		try {
+			repository.deleteById(id);
+		}catch (Exception e){
+			throw new NotFoundException("The ressource with given id could not be found", e);
+		}
+		
 	}
 	
 	
@@ -50,7 +65,7 @@ public class UserServiceImpl implements UserService, GenericService<UserDto> {
 		
 		
 		if(user == null) {
-			throw new Exception("User with given email not found !");
+			throw new EmailException("User with given email not found");
 		}
 		
 		return user;
@@ -61,7 +76,7 @@ public class UserServiceImpl implements UserService, GenericService<UserDto> {
 	public void checkUserCredentials(User user, UserUpdateDto userUpdateDto) throws Exception {
 		
 		if( user.getPassword() != HashTools.hashSHA512(userUpdateDto.getPassword())){
-			throw new Exception("Wrong password !");
+			throw new CredentialsException("Wrong credentials");
 		}
 		
 	}
@@ -74,7 +89,7 @@ public class UserServiceImpl implements UserService, GenericService<UserDto> {
 		checkUserCredentials(user, userUpdateDto);
 		
 		if( !EmailTools.checkIfEmailIsValid(userUpdateDto.getNewEmail())) {
-			throw new Exception("Email format is not valid !");
+			throw new EmailException("Email format is not valid !");
 		}
 		
 		user.setEmail(userUpdateDto.getNewEmail());
@@ -96,7 +111,7 @@ public class UserServiceImpl implements UserService, GenericService<UserDto> {
 		checkUserCredentials(user, userUpdateDto);
 		
 		if (userUpdateDto.getNewPassword().length() < 8) {
-			throw new Exception("Password is too short !");
+			throw new CredentialsException("Password is too short !");
 		}
 		
 		
@@ -116,7 +131,7 @@ public class UserServiceImpl implements UserService, GenericService<UserDto> {
 		User userLoginTest = repository.findByLogin(newUser.getLogin()).orElse(null);
 
 		if (userLoginTest != null) {
-			throw new Exception("Login is already used !");
+			throw new CredentialsException("Login is already used !");
 		}
 
 		// Checks if the email is valid
@@ -124,19 +139,19 @@ public class UserServiceImpl implements UserService, GenericService<UserDto> {
 
 		// --- checks if the email matches the pattern
 		if (EmailTools.checkIfEmailIsValid(userEmail)) {
-			throw new Exception("Email format is not valid !");
+			throw new EmailException("Email format is not valid !");
 		}
 
 		// --- checks if the email already exists
 		User userEmailTest = repository.findByEmail(userEmail).orElse(null);
 
 		if (userEmailTest != null) {
-			throw new Exception("Email is already used !");
+			throw new EmailException("Email is already used !");
 		}
 
 		// Checks if password is long enough
 		if (newUser.getPassword().length() < 8) {
-			throw new Exception("Password is too short !");
+			throw new CredentialsException("Password is too short !");
 		}
 
 		User userToPersist = mapper.userUpdateDtoToUser(newUser);
