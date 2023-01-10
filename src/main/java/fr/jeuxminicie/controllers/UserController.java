@@ -105,7 +105,7 @@ public class UserController {
 	}
 	
 	
-	@PutMapping(value="/update/email", consumes = "application/json", produces = "application/json")
+	@PutMapping(value="/reset", consumes = "application/json", produces = "application/json")
 	public ResponseEntity<Object> resetCredentials(@RequestBody UserUpdateDto user) throws Exception {
 		
 		try {

@@ -1,7 +1,7 @@
 package fr.jeuxminicie.services;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,8 +12,8 @@ import fr.jeuxminicie.entities.User;
 import fr.jeuxminicie.exceptions.CredentialsException;
 import fr.jeuxminicie.exceptions.EmailException;
 import fr.jeuxminicie.exceptions.NotFoundException;
-import fr.jeuxminicie.mappers.UserMapper;
 import fr.jeuxminicie.repositories.UserRepository;
+import fr.jeuxminicie.tools.DtoTools;
 import fr.jeuxminicie.tools.EmailTools;
 import fr.jeuxminicie.tools.HashTools;
 import jakarta.transaction.Transactional;
@@ -24,15 +24,13 @@ public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserRepository repository;
-
-	@Autowired
-	private UserMapper mapper;
+	
 
 	@Override
 	public UserDto getById(long id) throws Exception {
 		
 		try {
-			return mapper.userToUserDto(repository.getReferenceById(id));
+			return DtoTools.convert(repository.getReferenceById(id), UserDto.class);
 		}catch (Exception e) {
 			throw new NotFoundException("The ressource with given id could not be found", e);
 		}
@@ -42,7 +40,17 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<UserDto> getAll() throws Exception {
 
-		return repository.findAll().stream().map(mapper::userToUserDto).collect(Collectors.toList());
+		
+		List<User> users = repository.findAll();
+		
+		List<UserDto> result = new ArrayList<>();
+	
+		for ( User user : users ) {
+			result.add(DtoTools.convert(user, UserDto.class));
+		}
+		
+		return result;
+
 	}
 
 	@Override
@@ -75,7 +83,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void checkUserCredentials(User user, UserUpdateDto userUpdateDto) throws Exception {
 		
-		if( user.getPassword() != HashTools.hashSHA512(userUpdateDto.getPassword())){
+		if( !user.getPassword().equals(HashTools.hashSHA512(userUpdateDto.getPassword()))){
 			throw new CredentialsException("Wrong credentials");
 		}
 		
@@ -96,7 +104,7 @@ public class UserServiceImpl implements UserService {
 
 		User userPersisted = repository.saveAndFlush(user);
 		
-		UserDto userPersistedDto = mapper.userToUserDto(userPersisted);
+		UserDto userPersistedDto = DtoTools.convert(userPersisted, UserDto.class);
 		
 		return userPersistedDto;
 		
@@ -119,7 +127,7 @@ public class UserServiceImpl implements UserService {
 		
 		User userPersisted = repository.saveAndFlush(user);
 		
-		UserDto userPersistedDto = mapper.userToUserDto(userPersisted);
+		UserDto userPersistedDto = DtoTools.convert(userPersisted, UserDto.class);;
 		
 		return userPersistedDto;
 	}
@@ -138,7 +146,7 @@ public class UserServiceImpl implements UserService {
 		String userEmail = newUser.getEmail();
 
 		// --- checks if the email matches the pattern
-		if (EmailTools.checkIfEmailIsValid(userEmail)) {
+		if (!EmailTools.checkIfEmailIsValid(userEmail)) {
 			throw new EmailException("Email format is not valid !");
 		}
 
@@ -154,14 +162,14 @@ public class UserServiceImpl implements UserService {
 			throw new CredentialsException("Password is too short !");
 		}
 
-		User userToPersist = mapper.userUpdateDtoToUser(newUser);
+		User userToPersist = DtoTools.convert(newUser, User.class);
 
 		userToPersist.setId(0);
 		userToPersist.setVersion(0);
 		userToPersist.setPassword(HashTools.hashSHA512(newUser.getPassword()));
 
 		User userPersisted = repository.saveAndFlush(userToPersist);
-		UserDto userPersistedDto = mapper.userToUserDto(userPersisted);
+		UserDto userPersistedDto = DtoTools.convert(userPersisted, UserDto.class);
 
 		return userPersistedDto;
 	}
@@ -177,7 +185,7 @@ public class UserServiceImpl implements UserService {
 		
 		User userPersisted = repository.saveAndFlush(user);
 		
-		UserDto userPersistedDto = mapper.userToUserDto(userPersisted);
+		UserDto userPersistedDto = DtoTools.convert(userPersisted, UserDto.class);
 		
 		return userPersistedDto;
 		
