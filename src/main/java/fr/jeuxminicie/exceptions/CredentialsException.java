@@ -15,12 +15,12 @@ public class CredentialsException extends Exception {
 	}
 
 	public CredentialsException(String message, Throwable cause) {
-		super(message, cause);
+		super("CredentialsException : " + message, cause);
 		// TODO Auto-generated constructor stub
 	}
 
 	public CredentialsException(String message) {
-		super(message);
+		super("CredentialsException : " + message);
 		// TODO Auto-generated constructor stub
 	}
 

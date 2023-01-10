@@ -9,7 +9,7 @@ public class EmailException extends Exception {
 	}
 
 	public EmailException(String message, Throwable cause) {
-		super(message, cause);
+		super("EmailException : " + message, cause);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -19,7 +19,7 @@ public class EmailException extends Exception {
 	}
 
 	public EmailException(String message) {
-		super(message);
+		super("EmailException : " + message);
 		// TODO Auto-generated constructor stub
 	}
 

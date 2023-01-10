@@ -13,12 +13,12 @@ public class NotFoundException extends Exception{
 	}
 
 	public NotFoundException(String message, Throwable cause) {
-		super(message, cause);
+		super("NotFoundException : " + message, cause);
 		// TODO Auto-generated constructor stub
 	}
 
 	public NotFoundException(String message) {
-		super(message);
+		super("NotFoundException : " + message);
 		// TODO Auto-generated constructor stub
 	}
 
