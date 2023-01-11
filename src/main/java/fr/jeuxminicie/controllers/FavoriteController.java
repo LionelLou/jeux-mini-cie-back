@@ -27,9 +27,18 @@ public class FavoriteController {
 	private FavoriteService service;
 
 	@GetMapping(produces = "application/json")
-	public List<FavoriteDto> getAll() throws Exception {
-		return service.getAll();
+	public ResponseEntity<Object> getAll() throws Exception {
+		
+		try {
+			List<FavoriteDto> result = service.getAll();
+			return ResponseEntity.status(HttpStatus.OK).body(result);
+		}catch (Exception e){
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("An error occured, please check you request or contact administrator"); 
+					
+		}
+			
 	}
+
 
 	@GetMapping(value = "/{id}", produces = "application/json")
 	public ResponseEntity<Object> getById(@PathVariable("id") long id) throws Exception {
@@ -50,7 +59,7 @@ public class FavoriteController {
 
 		try {
 			service.deleteById(id);
-			return ResponseEntity.status(HttpStatus.OK).body("Successfully deleted user with id : " + id);
+			return ResponseEntity.status(HttpStatus.OK).body("Successfully deleted favorite with id : " + id);
 
 		} catch (NotFoundException e) {
 
