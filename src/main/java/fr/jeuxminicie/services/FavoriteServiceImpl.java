@@ -96,11 +96,11 @@ public class FavoriteServiceImpl implements FavoriteService {
 	}
 
 	@Override
-	public List<FavoriteDto> getAllFavoritesForUserIdByPage(int page, int max, long userId, String gameName)
+	public List<FavoriteDto> getAllFavoritesForUserIdByPage(int page, int max, long userId, String search)
 			throws Exception {
 
 		List<Favorite> favorites = repository
-				.findAllByUserIdAndGameNameContaining(userId, gameName, PageRequest.of(page, max)).get()
+				.findAllByUserIdAndGameNameContaining(userId, search, PageRequest.of(page, max)).get()
 				.collect(Collectors.toList());
 
 		List<FavoriteDto> result = new ArrayList<>();

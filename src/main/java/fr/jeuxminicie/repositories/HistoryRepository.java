@@ -12,9 +12,9 @@ import fr.jeuxminicie.entities.History;
 @Repository
 public interface HistoryRepository extends JpaRepository<History, Long>{
 
-	List<History> findAllByUserNameContainingOrUserEmailContainingOrGameNameContaining(String userName, String userEmail, String gameName);
+	List<History> findAllByUserLoginContainingOrUserEmailContainingOrGameNameContaining(String userLogin, String userEmail, String gameName);
 
-	Page<History> findAllByUserNameContainingOrUserEmailContainingOrGameNameContaining(String userName, String userEmail, String gameName, Pageable pageable);
+	Page<History> findAllByUserLoginContainingOrUserEmailContainingOrGameNameContaining(String userLogin, String userEmail, String gameName, Pageable pageable);
 	
 	List<History> findAllByUserId(long userId);
 	
