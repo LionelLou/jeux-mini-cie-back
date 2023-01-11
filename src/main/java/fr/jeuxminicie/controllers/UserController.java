@@ -29,12 +29,12 @@ public class UserController {
 	private UserService service;
 
 	@GetMapping(produces = "application/json")
-	public List<UserDto> getAllUsers() throws Exception {
+	public List<UserDto> getAll() throws Exception {
 		return service.getAll();
 	}
 
 	@GetMapping(value = "/{id}", produces = "application/json")
-	public ResponseEntity<Object> getUserById(@PathVariable("id") long id) throws Exception {
+	public ResponseEntity<Object> getById(@PathVariable("id") long id) throws Exception {
 
 		try {
 			UserDto result = service.getById(id);
