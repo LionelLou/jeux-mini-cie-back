@@ -12,7 +12,7 @@ import fr.jeuxminicie.entities.Game;
 @Repository
 public interface GameRepository extends JpaRepository<Game, Long>{
 
-	List<Game> findAllByGameNameContaining(String name);
+	List<Game> findAllByNameContaining(String name);
 	
-	Page<Game> findAllByGameNameContaining(String name, Pageable pageable);
+	Page<Game> findAllByNameContaining(String name, Pageable pageable);
 }

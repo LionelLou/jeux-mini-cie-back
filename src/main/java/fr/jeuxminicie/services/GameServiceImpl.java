@@ -42,7 +42,7 @@ public class GameServiceImpl implements GameService{
 	@Override
 	public List<GameDto> getAllByPage(int page, int max, String search) throws Exception {
 
-		List<Game> games = repository.findAllByGameNameContaining(search, PageRequest.of(page, max)).get().collect(Collectors.toList());
+		List<Game> games = repository.findAllByNameContaining(search, PageRequest.of(page, max)).get().collect(Collectors.toList());
 
 		List<GameDto> result = new ArrayList<>();
 
@@ -68,7 +68,7 @@ public class GameServiceImpl implements GameService{
 	public CountDto count(String search) throws Exception {
 
 		CountDto count = new CountDto();
-		count.setNb(repository.findAllByGameNameContaining(search).size());
+		count.setNb(repository.findAllByNameContaining(search).size());
 		return count;
 
 	}

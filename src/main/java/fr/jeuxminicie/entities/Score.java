@@ -1,5 +1,6 @@
 package fr.jeuxminicie.entities;
 
+import java.time.LocalDate;
 import java.util.Objects;
 
 import jakarta.persistence.Column;
@@ -28,9 +29,10 @@ public class Score {
 	@Column(nullable = true)
 	private int time; 
 	
+	private LocalDate date;
+	
 	@Version
 	private int version;
-	
 	
 
 	public Score() {
@@ -38,13 +40,14 @@ public class Score {
 	}
 
 
-	public Score(long id, User user, Game game, int score, int time, int version) {
+	public Score(long id, User user, Game game, int score, int time, LocalDate date, int version) {
 		super();
 		this.id = id;
 		this.user = user;
 		this.game = game;
 		this.score = score;
 		this.time = time;
+		this.date = date;
 		this.version = version;
 	}
 
@@ -98,6 +101,16 @@ public class Score {
 		this.time = time;
 	}
 
+	
+	public LocalDate getDate() {
+		return date;
+	}
+
+
+	public void setDate(LocalDate date) {
+		this.date = date;
+	}
+
 
 	public int getVersion() {
 		return version;
@@ -111,7 +124,7 @@ public class Score {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(game, id, score, time, user, version);
+		return Objects.hash(date, game, id, score, time, user, version);
 	}
 
 
@@ -124,15 +137,16 @@ public class Score {
 		if (getClass() != obj.getClass())
 			return false;
 		Score other = (Score) obj;
-		return Objects.equals(game, other.game) && id == other.id && score == other.score && time == other.time
-				&& Objects.equals(user, other.user) && version == other.version;
+		return Objects.equals(date, other.date) && Objects.equals(game, other.game) && id == other.id
+				&& score == other.score && time == other.time && Objects.equals(user, other.user)
+				&& version == other.version;
 	}
 
 
 	@Override
 	public String toString() {
 		return "Score [id=" + id + ", user=" + user + ", game=" + game + ", score=" + score + ", time=" + time
-				+ ", version=" + version + "]";
+				+ ", date=" + date + ", version=" + version + "]";
 	}
-	
+
 }
