@@ -2,6 +2,8 @@ package fr.jeuxminicie.repositories;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -11,7 +13,11 @@ import fr.jeuxminicie.entities.Score;
 
 @Repository
 public interface ScoreRepository extends JpaRepository<Score, Long>{
+	
+	
+	List<Score> findAllByUserLoginContainingOrUserEmailContainingOrGameNameContaining(String userLogin, String userEmail, String GameName);
 
+	Page<Score> findAllByUserLoginContainingOrUserEmailContainingOrGameNameContaining(String userLogin, String userEmail, String GameName, Pageable pageable);
 	
 	List<Score> findAllByUserIdAndGameId(long userId, long gameId);
 	
