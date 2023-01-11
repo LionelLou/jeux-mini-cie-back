@@ -5,10 +5,10 @@ import java.util.List;
 import fr.jeuxminicie.dtos.CountDto;
 import fr.jeuxminicie.dtos.FavoriteDto;
 
-public interface FavoriteService {
+public interface FavoriteService extends GenericService<FavoriteDto>{
 	
 	
-	FavoriteDto save(FavoriteDto favoriteDto) throws Exception;
+	FavoriteDto createNew(FavoriteDto favoriteDto) throws Exception;
 
 	List<FavoriteDto> getAllFavoritesForUserIdByPage(int page, int max, long userId, String gameName) throws Exception;
 	

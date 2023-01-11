@@ -18,7 +18,7 @@ import jakarta.transaction.Transactional;
 
 @Service
 @Transactional
-public class FavoriteServiceImpl implements FavoriteService, GenericService<FavoriteDto> {
+public class FavoriteServiceImpl implements FavoriteService {
 
 	@Autowired
 	private FavoriteRepository repository;
@@ -86,7 +86,7 @@ public class FavoriteServiceImpl implements FavoriteService, GenericService<Favo
 	}
 
 	@Override
-	public FavoriteDto save(FavoriteDto favoriteDto) throws Exception {
+	public FavoriteDto createNew(FavoriteDto favoriteDto) throws Exception {
 
 		Favorite favoriteToPersist = DtoTools.convert(favoriteDto, Favorite.class);
 

@@ -23,7 +23,7 @@ import jakarta.transaction.Transactional;
 
 @Service
 @Transactional
-public class UserServiceImpl implements UserService, GenericService<UserDto> {
+public class UserServiceImpl implements UserService {
 
 	@Autowired
 	private UserRepository repository;
