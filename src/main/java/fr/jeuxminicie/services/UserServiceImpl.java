@@ -2,10 +2,13 @@ package fr.jeuxminicie.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import fr.jeuxminicie.dtos.CountDto;
 import fr.jeuxminicie.dtos.UserDto;
 import fr.jeuxminicie.dtos.UserUpdateDto;
 import fr.jeuxminicie.entities.User;
@@ -20,22 +23,11 @@ import jakarta.transaction.Transactional;
 
 @Service
 @Transactional
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService, GenericService<UserDto> {
 
 	@Autowired
 	private UserRepository repository;
 	
-
-	@Override
-	public UserDto getById(long id) throws Exception {
-		
-		try {
-			return DtoTools.convert(repository.getReferenceById(id), UserDto.class);
-		}catch (Exception e) {
-			throw new NotFoundException("The ressource with given id could not be found", e);
-		}
-			
-	}
 
 	@Override
 	public List<UserDto> getAll() throws Exception {
@@ -52,7 +44,44 @@ public class UserServiceImpl implements UserService {
 		return result;
 
 	}
+	
+	
+	@Override
+	public List<UserDto> getAllByPage(int page, int max, String search) throws Exception {
+		
+		List<User> users = repository.findAllByLoginContainingOrEmailContaining(
+				search, search, PageRequest.of(page, max)).get().collect(Collectors.toList());
 
+		List<UserDto> result = new ArrayList<>();
+			
+		for (User user : users) {
+			result.add(DtoTools.convert(user, UserDto.class));
+		}
+			
+		return result;
+	}
+	
+
+	@Override
+	public UserDto getById(long id) throws Exception {
+		
+		try {
+			return DtoTools.convert(repository.getReferenceById(id), UserDto.class);
+		}catch (Exception e) {
+			throw new NotFoundException("The ressource with given id could not be found");
+		}
+			
+	}
+	
+	
+	@Override
+	public CountDto count(String search) throws Exception {
+		CountDto count = new CountDto();
+		count.setNb(repository.findAllByLoginContainingOrEmailContaining(search, search).size());
+		return count;
+	}
+
+	
 	@Override
 	public void deleteById(long id) throws Exception {
 		
@@ -63,8 +92,6 @@ public class UserServiceImpl implements UserService {
 		}
 		
 	}
-	
-	
 	
 	@Override
 	public User checkIfUserEmailExistsAndReturnUser(UserUpdateDto userUpdateDto) throws Exception {
@@ -190,9 +217,5 @@ public class UserServiceImpl implements UserService {
 		return userPersistedDto;
 		
 	}
-
-
-
-
 
 }
