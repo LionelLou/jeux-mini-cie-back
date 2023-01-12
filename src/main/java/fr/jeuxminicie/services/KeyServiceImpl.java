@@ -6,8 +6,10 @@ import org.springframework.stereotype.Service;
 
 import fr.jeuxminicie.entities.SecretKey;
 import fr.jeuxminicie.repositories.SecretKeyRepository;
+import jakarta.transaction.Transactional;
 
 @Service
+@Transactional
 public class KeyServiceImpl implements KeyService {
 	
 	@Autowired

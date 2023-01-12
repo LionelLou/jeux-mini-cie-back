@@ -25,9 +25,6 @@ public class JwtTokenUtil implements Serializable {
 	@Value("${jwt.duration}")
 	private long duration;
 	
-	@Value("${jwt.secret}")
-	private String secret;
-	
 	@Autowired
 	private KeyService keyService;
 	
