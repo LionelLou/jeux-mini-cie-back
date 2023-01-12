@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Service;
 
 import fr.jeuxminicie.dtos.CountDto;
 import fr.jeuxminicie.dtos.ScoreDto;
@@ -13,7 +14,10 @@ import fr.jeuxminicie.entities.Score;
 import fr.jeuxminicie.exceptions.NotFoundException;
 import fr.jeuxminicie.repositories.ScoreRepository;
 import fr.jeuxminicie.tools.DtoTools;
+import jakarta.transaction.Transactional;
 
+@Service
+@Transactional
 public class ScoreServiceImpl implements ScoreService{
 	
 	@Autowired
